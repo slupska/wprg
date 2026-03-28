@@ -1,107 +1,112 @@
 <?php
 
-function sito($n)
-{
-    $A = [];
-    for ($i = 0; $i <= $n; $i++) {
-        array_push($A, true);
+$dokumenty = [
+    0 => "PHP jest językiem skryptowym używanym do tworzenia stron internetowych",
+    1 => "Tablice w PHP mogą być indeksowane lub asocjacyjne i bardzo przydatne",
+    2 => "Funkcje array_map i array_filter ułatwiają przetwarzanie tablic w PHP",
+    3 => "PHP obsługuje tablice wielowymiarowe i zagnieżdżone struktury danych",
+    4 => "Serwer Apache współpracuje z PHP do obsługi żądań HTTP i połączeń",
+    5 => "Bazy danych MySQL są często używane razem z PHP do przechowywania",
+    6 => "Funkcja usort sortuje tablice w PHP według różnych kryteriów i warunków",
+    7 => "JavaScript i PHP razem tworzą dynamiczne aplikacje internetowe i serwisy",
+    8 => "PHP posiada wbudowane funkcje do pracy z plikami tablicami i bazami",
+    9 => "Bezpieczeństwo aplikacji PHP wymaga walidacji danych wejściowych i filtrów",
+];
+
+$stopWords = ['i', 'w', 'na', 'do', 'z', 'są', 'lub', 'być', 'może', 'jest', 'się'];
+
+$index = [];
+
+foreach ($dokumenty as $id => $tekst) {
+    $tekst = strtolower($tekst);
+    $tekst = preg_replace('/[^a-ząćęłńóśźż ]/', '', $tekst);
+    $slowa = explode(' ', $tekst);
+
+    foreach ($slowa as $slowo) {
+        if (strlen($slowo) < 3 || in_array($slowo, $stopWords)) {
+            continue;
+        }
+        if (!isset($index[$slowo][$id])) {
+            $index[$slowo][$id] = 0;
+        }
+        $index[$slowo][$id]++;
     }
-    $A[0] = $A[1] = false;
-    for ($i = 2; $i <= sqrt($n); $i++) {
-        if ($A[$i]) {
-            for ($j = $i * $i; $j <= $n; $j += $i) {
-                $A[$j] = false;
+}
+
+$czestosci = [];
+foreach ($index as $slowo => $docs) {
+    $czestosci[$slowo] = array_sum($docs);
+}
+arsort($czestosci);
+$top5 = array_slice($czestosci, 0, 5, true);
+
+echo "Top 5 najczęstszych słów:\n";
+foreach ($top5 as $slowo => $ile) {
+    echo "  '$slowo': {$ile}x\n";
+}
+
+function szukajAND($zapytanie, $index) {
+    $listaIds = null;
+    foreach ($zapytanie as $slowo) {
+        if (!isset($index[$slowo])) {
+            return [];
+        }
+        $ids = array_keys($index[$slowo]);
+        if ($listaIds === null) {
+            $listaIds = $ids;
+        } else {
+            $listaIds = array_intersect($listaIds, $ids);
+        }
+    }
+    return $listaIds ?? [];
+}
+
+function szukajOR($zapytanie, $index) {
+    $listaIds = [];
+    foreach ($zapytanie as $slowo) {
+        if (isset($index[$slowo])) {
+            $listaIds = array_merge($listaIds, array_keys($index[$slowo]));
+        }
+    }
+    return array_unique($listaIds);
+}
+
+function rankuj($ids, $zapytanie, $index) {
+    $wyniki = [];
+    foreach ($ids as $id) {
+        $score = 0;
+        $szczegoly = [];
+        foreach ($zapytanie as $slowo) {
+            $tf = isset($index[$slowo][$id]) ? $index[$slowo][$id] : 0;
+            $score += $tf;
+            if ($tf > 0) {
+                $szczegoly[] = "$slowo:$tf";
             }
         }
+        $wyniki[] = ['id' => $id, 'score' => $score, 'szczegoly' => $szczegoly];
     }
-    $result = [];
-    foreach ($A as $i => $value) {
-        if ($value) {
-            $result[] = $i;
-        }
-    }
-    return $result;
+    usort($wyniki, function($a, $b) { return $b['score'] - $a['score']; });
+    return $wyniki;
 }
 
-$array = sito(100);
-echo "Liczby pierwsze [1-100] bloki po 10:<br>[ ";
-foreach ($array as $i => $value) {
-    if ($i % 9 == 0 && $i != 0) {
-        echo $value;
-        echo " ]<br>[ ";
-    } elseif ($i == sizeof($array) - 1) {
-        echo $value . " ]<br>";
-    } else {
-        echo $value . ", ";
-    }
+$zapytanieAND = ['php', 'tablice'];
+$idsAND = szukajAND($zapytanieAND, $index);
+$wynikAND = rankuj($idsAND, $zapytanieAND, $index);
+
+echo "\nWyniki dla (php AND tablice):\n";
+foreach ($wynikAND as $i => $w) {
+    $nr = $i + 1;
+    $szcz = implode(', ', $w['szczegoly']);
+    echo "  $nr. Dokument ID:{$w['id']} | Score:{$w['score']} ($szcz)\n";
 }
 
-function density($a, $b)
-{
-    $mid = ($a + $b) / 2;
-    $density = ($b - $a) / log($mid);
-    return $density;
+$zapytanieOR = ['mysql', 'javascript'];
+$idsOR = szukajOR($zapytanieOR, $index);
+$wynikOR = rankuj($idsOR, $zapytanieOR, $index);
+
+echo "\nWyniki dla (mysql OR javascript):\n";
+foreach ($wynikOR as $i => $w) {
+    $nr = $i + 1;
+    $szcz = implode(', ', $w['szczegoly']);
+    echo "  $nr. Dokument ID:{$w['id']} | Score:{$w['score']} ($szcz)\n";
 }
-
-function countFirstNums($a, $b)
-{
-    $primesAll = sito($b);
-    $primes = [];
-    foreach ($primesAll as $value) {
-        if ($value >= $a) {
-            $primes[] = $value;
-        }
-    }
-    return count($primes);
-}
-
-function goldbachNum($a)
-{
-    if ($a % 2) {
-        return [];
-    }
-    $primes = sito($a);
-    $sums = [];
-    foreach ($primes as $value1) {
-        if ($value1 <= $a / 2) {
-            foreach ($primes as $value2) {
-                if ($value1 + $value2 == $a) {
-                    $sums[] = "[$value1 + $value2]";
-                }
-            }
-        }
-    }
-    return $sums;
-}
-
-function biggestGoldbachInRange($a, $b, &$biggest, &$biggestArr)
-{
-    $biggest = 0;
-    $biggestArr = [];
-    for ($i = $a; $i <= $b; $i++) {
-        $currentSums = goldbachNum($i);
-        if ($currentSums) {
-            if (sizeof($currentSums) > sizeof($biggestArr)) {
-                $biggest = $i;
-                $biggestArr = $currentSums;
-            }
-        }
-    }
-};
-
-echo "<br> Gęstość liczb pierwszych:<br>";
-echo "Przedział: [1-100]: " . countFirstNums(1, 100)
- . " | teoretycznie: ~" . density(1, 100) . "<br>";
-echo "Przedział: [101-200]: " . countFirstNums(101, 200)
- . " | teoretycznie: ~" . density(101, 200) . "<br>";
-echo "Przedział: [201-300]: " . countFirstNums(201, 300)
- . " | teoretycznie: ~" . density(201, 300) . "<br>";
-echo "Przedział: [301-400]: " . countFirstNums(301, 400)
- . " | teoretycznie: ~" . density(301, 400) . "<br>";
-echo "Przedział: [401-500]: " . countFirstNums(401, 500)
- . " | teoretycznie: ~" . density(401, 500) . "<br>";
-
-biggestGoldbachInRange(4, 200, $biggest, $biggestArr);
-echo "<br> Goldbach - najwięcej par w [4, 200]: liczba "
- . $biggest . " (" . sizeof($biggestArr) . " par) <br>";
-echo "Pary goldbacha dla 30: " . implode(", ", goldbachNum(30));
