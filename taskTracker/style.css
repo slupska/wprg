@@ -1,0 +1,245 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    background-color: #e8eaed;
+    color: #222;
+}
+
+header {
+    background-color: #e8eaed;
+    text-align: center;
+    padding: 24px 30px 0;
+}
+
+.header-inner-blue-line {
+    max-width: 960px;
+    margin: 0 auto;
+    border-bottom: 3px solid #3a7bd5;
+}
+
+main {
+    max-width: 960px;
+    margin: 30px auto;
+    background: #fff;
+    padding: 30px 36px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1a2e4a;
+    padding-bottom: 16px;
+}
+
+
+h2 {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1a2e4a;
+    margin-bottom: 22px;
+}
+
+.alert {
+    background-color: #fce8e8;
+    border-left: 4px solid #c0392b;
+    padding: 11px 16px;
+    margin-bottom: 26px;
+    color: #c0392b;
+    font-size: 14px;
+}
+
+.alert ul {
+    list-style: disc;
+    padding-left: 18px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 20px 24px;
+}
+
+.col-span-2 {
+    grid-column: span 2;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.row-2col {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+label {
+    font-weight: bold;
+    font-size: 13px;
+    color: #111;
+}
+
+label .required {
+    color: #c0392b;
+    margin-left: 2px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+textarea,
+select {
+    width: 100%;
+    padding: 7px 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    background-color: #fff;
+    color: #222;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+textarea:focus,
+select:focus {
+    outline: none;
+    border-color: #4a7cc7;
+    box-shadow: 0 0 0 3px rgba(74, 124, 199, 0.18);
+}
+
+select {
+    background-color: #f7f7f7;
+    cursor: pointer;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.checkbox-group {
+    grid-column: 1 / -1;
+    border-top: 1px solid #eee;
+    padding-top: 16px;
+}
+
+.checkbox-group .group-label {
+    display: block;
+    font-weight: bold;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 20px;
+}
+
+.checkboxes label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: normal;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.checkboxes input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    cursor: pointer;
+}
+
+.notification-label {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.notification-label input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+}
+
+/* 
+.buttons {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 12px;
+    padding-top: 6px;
+}
+
+button {
+    padding: 9px 22px;
+    border: none;
+    border-radius: 3px;
+    font-size: 14px;
+    font-family: Arial, sans-serif;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+.btn-primary {
+    background-color: #2c5282;
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background-color: #1a3a6b;
+}
+
+.btn-secondary {
+    background-color: #e2e2e2;
+    color: #333;
+    border: 1px solid #ccc;
+}
+
+.btn-secondary:hover {
+    background-color: #cacaca;
+}
+
+button:active {
+    transform: scale(0.97);
+} */
+
+@media (max-width: 600px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .col-span-2,
+    .full-width,
+    .checkbox-group,
+    .buttons {
+        grid-column: 1;
+    }
+
+    main {
+        margin: 0;
+        padding: 20px 16px;
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+}
