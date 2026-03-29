@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rozbudowany Menedżer Zadań</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            background-color: #e8eaed;
+            color: #222;
+        }
+
+        header {
+            background-color: #e8eaed;
+            text-align: center;
+            padding: 24px 30px 0;
+        }
+
+        .header-inner-blue-line {
+            max-width: 960px;
+            margin: 0 auto;
+            border-bottom: 3px solid #3a7bd5;
+        }
+
+        main {
+            max-width: 960px;
+            margin: 30px auto;
+            background: #fff;
+            padding: 30px 36px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        h1 {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a2e4a;
+            padding-bottom: 16px;
+        }
+
+        h2 {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1a2e4a;
+            margin-bottom: 22px;
+        }
+
+        .alert {
+            background-color: #fce8e8;
+            border-left: 4px solid #c0392b;
+            padding: 11px 16px;
+            margin-bottom: 26px;
+            color: #c0392b;
+            font-size: 14px;
+        }
+
+        .alert ul {
+            list-style: disc;
+            padding-left: 18px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px 24px;
+        }
+
+        .col-span-2 {
+            grid-column: span 2;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .row-2col {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        label {
+            font-weight: bold;
+            font-size: 13px;
+            color: #111;
+        }
+
+        label .required {
+            color: #c0392b;
+            margin-left: 2px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 7px 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            font-size: 14px;
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+            color: #222;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        input[type="date"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: #4a7cc7;
+            box-shadow: 0 0 0 3px rgba(74, 124, 199, 0.18);
+        }
+
+        select {
+            background-color: #f7f7f7;
+            cursor: pointer;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .checkbox-group {
+            grid-column: 1 / -1;
+            border-top: 1px solid #eee;
+            padding-top: 16px;
+        }
+
+        .checkbox-group .group-label {
+            display: block;
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
+        .checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 20px;
+        }
+
+        .checkboxes label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-weight: normal;
+            font-size: 13px;
+            cursor: pointer;
+        }
+
+        .checkboxes input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+            cursor: pointer;
+        }
+
+        .notification-label {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        .notification-label input[type="checkbox"] {
+            width: 14px;
+            height: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .col-span-2,
+            .full-width,
+            .checkbox-group,
+            .buttons {
+                grid-column: 1;
+            }
+
+            main {
+                margin: 0;
+                padding: 20px 16px;
+                border-radius: 0;
+                border-left: none;
+                border-right: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="header-inner-blue-line">
+            <h1>Rozbudowany Menedżer Zadań</h1>
+        </div>
+    </header>
+
+    <main>
+        <h2>Dodaj nowe zadanie</h2>
+
+        <div class="alert" role="alert">
+            <ul>
+                <li>Kategoria jest wymagana ⚠</li>
+            </ul>
+        </div>
+
+        <form action="#">
+            <div class="form-grid">
+
+                <div class="row-2col">
+                    <div class="form-group">
+                        <label for="tytul">Tytuł zadania: <span class="required">*</span></label>
+                        <input type="text" id="tytul" name="tytul" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="kategoria">Kategoria: <span class="required">*</span></label>
+                        <select id="kategoria" name="kategoria" required>
+                            <option value="">Wybierz kategorię</option>
+                            <option value="domowe">Domowe</option>
+                            <option value="praca">Praca</option>
+                            <option value="nauka">Nauka</option>
+                            <option value="hobby">Hobby</option>
+                            <option value="inne">Inne</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="opis">Opis zadania:</label>
+                    <textarea id="opis" name="opis"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="priorytet">Priorytet: <span class="required">*</span></label>
+                    <select id="priorytet" name="priorytet" required>
+                        <option value="">Wybierz priorytet</option>
+                        <option value="niski">Niski</option>
+                        <option value="sredni">Średni</option>
+                        <option value="wysoki">Wysoki</option>
+                        <option value="krytyczny">Krytyczny</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <select id="status" name="status">
+                        <option value="">Wybierz status</option>
+                        <option value="nowe">Nowe</option>
+                        <option value="w_toku">W toku</option>
+                        <option value="zakonczone">Zakończone</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="data_wykonania">Data wykonania: <span class="required">*</span></label>
+                    <input type="text" id="data_wykonania" name="data_wykonania" placeholder="14.04.2025" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="czas">Szacowany czas (minuty):</label>
+                    <input type="number" id="czas" name="czas" min="0">
+                </div>
+
+                <div class="form-group">
+                    <label for="lokalizacja">Lokalizacja:</label>
+                    <input type="text" id="lokalizacja" name="lokalizacja">
+                </div>
+
+                <div class="form-group">
+                    <label for="osoba">Osoba przypisana:</label>
+                    <input type="text" id="osoba" name="osoba">
+                </div>
+
+                <div class="checkbox-group">
+                    <label class="group-label">Potrzebne zasoby:</label>
+                    <div class="checkboxes">
+                        <label><input type="checkbox" name="zasoby" value="komputer"> Komputer</label>
+                        <label><input type="checkbox" name="zasoby" value="internet"> Internet</label>
+                        <label><input type="checkbox" name="zasoby" value="telefon"> Telefon</label>
+                        <label><input type="checkbox" name="zasoby" value="samochod"> Samochód</label>
+                        <label><input type="checkbox" name="zasoby" value="ksiazka"> Książka</label>
+                        <label><input type="checkbox" name="zasoby" value="narzedzia"> Narzędzia</label>
+                        <label><input type="checkbox" name="zasoby" value="dokumenty"> Dokumenty</label>
+                        <label><input type="checkbox" name="zasoby" value="inne"> Inne</label>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </main>
+
+</body>
+
+</html>

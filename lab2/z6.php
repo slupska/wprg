@@ -24,7 +24,6 @@ function minutyNaCzas($m) {
     return $h . ":" . str_pad($min, 2, "0", STR_PAD_LEFT);
 }
 
-// 1. Algorytm zachłanny — jedna sala
 $posortowane = $zadania;
 usort($posortowane, function($a, $b) { return $a['koniec'] - $b['koniec']; });
 
@@ -47,7 +46,6 @@ $kolejnosc = array_map(function($z) {
 }, $wybrane);
 echo "  Kolejność decyzji: " . implode(" → ", $kolejnosc) . "\n";
 
-// 2. Konflikty
 echo "\nKonflikty:\n";
 $konflikty = [];
 foreach ($zadania as $a) {
@@ -65,7 +63,6 @@ $maxKonflikty = max($konflikty);
 $najbardziej = array_search($maxKonflikty, $konflikty);
 echo "  Najbardziej konfliktowe: $najbardziej ($maxKonflikty kolizji z innymi zadaniami)\n";
 
-// 3. Minimalna liczba sal
 $posortowane2 = $zadania;
 usort($posortowane2, function($a, $b) { return $a['start'] - $b['start']; });
 
