@@ -1,0 +1,30 @@
+# Lokalny plik z hasłami – NIE commituj do repozytorium
+.env
+
+# Dane MySQL trzymane w Docker volume – nie potrzebujemy ich w repo
+mysql_data/
+
+# Pliki systemowe
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logi
+*.log
+
+# Edytory
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+# Zmienne środowiskowe dla Docker Dev Stack
+# Skopiuj ten plik jako .env i dostosuj wartości do swoich potrzeb
+# cp .env.example .env
+
+# Dane bazy danych
+DB_NAME=devdb
+DB_USER=devuser
+DB_PASSWORD=devpassword
+DB_ROOT_PASSWORD=rootpassword
+
